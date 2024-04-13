@@ -58,11 +58,22 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="appsettings.Development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
         <PackageReference Include="MudBlazor" Version="6.11.1" />
-    </ItemGroup>
+		<!--required when adding json file-->
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+	</ItemGroup>
 
 </Project>

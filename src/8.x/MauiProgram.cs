@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MudBlazor.Services;
+using System.Reflection;
 
 namespace MauiAppWithMudBlazor
 {
@@ -17,9 +20,23 @@ namespace MauiAppWithMudBlazor
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddMudServices();
+
+            // Load appsettings.json
+            var a = Assembly.GetExecutingAssembly();
+            using var stream = a.GetManifestResourceStream("MauiAppWithMudBlazor.appsettings.json");
+
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(stream)
+                .Build();
+
+            builder.Configuration.AddConfiguration(config);
+
+            builder.Services.Configure<AppSettings>(config.GetSection("AppSettings"))
+                 .AddSingleton(s => s.GetRequiredService<IOptions<AppSettings>>().Value)
+                 .AddSingleton<IAppSettings>(s => s.GetRequiredService<IOptions<AppSettings>>().Value);
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
